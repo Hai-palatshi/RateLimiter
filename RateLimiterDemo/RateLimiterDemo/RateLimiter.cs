@@ -24,7 +24,6 @@ public class RateLimiter<TArg>
 
     public async Task Perform(TArg input)
     {
-
         bool printedWaiting = false;
 
         // Keep checking if the action is allowed based on all rules
@@ -55,7 +54,8 @@ public class RateLimiter<TArg>
             _semaphore.Release();
             if (!printedWaiting)
             {
-                Console.WriteLine($"⏳ [{DateTime.Now:HH:mm:ss.fff}] Waiting for: {input}");
+                //wait
+                Console.WriteLine($"[{DateTime.Now:HH:mm:ss.fff}] Waiting for: {input}");
                 printedWaiting = true;
             }
             // Wait a bit before trying again
