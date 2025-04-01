@@ -15,7 +15,7 @@ class Program
 
         var rules = new List<RateLimitRule>
         {
-            new RateLimitRule(4, TimeSpan.FromSeconds(1))
+            new RateLimitRule(3, TimeSpan.FromSeconds(1))
         };
 
         var rules2 = new List<RateLimitRule>
@@ -35,11 +35,11 @@ class Program
             tasks.Add(limiter.Perform($"Call {copy}"));
         }
 
-        //for (int i = 1; i <= 10; i++)
-        //{
-        //    int copy = i; 
-        //    tasks.Add(limiter2.Perform($"Call {copy}"));
-        //}
+        for (int i = 1; i <= 10; i++)
+        {
+            int copy = i;
+            tasks.Add(limiter2.Perform($"Call {copy}"));
+        }
 
         await Task.WhenAll(tasks);
 
