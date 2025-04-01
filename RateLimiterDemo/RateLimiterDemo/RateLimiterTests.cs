@@ -16,11 +16,11 @@ public class RateLimiterTests
             new RateLimitRule(10, TimeSpan.FromSeconds(5))
         };
 
-        // פעולה המדמה קריאה ל-API (כוללת הדפסה + השהיה)
+        
         Func<string, Task> fakeApiCall = async (arg) =>
         {
             Console.WriteLine($"[ {DateTime.Now:HH:mm:ss.fff} ] Calling fake API with: {arg}");
-            await Task.Delay(200); // מדמה זמן תגובה של API
+            await Task.Delay(200); 
         };
 
         _limiter = new RateLimiter<string>(fakeApiCall, rules);
@@ -38,6 +38,6 @@ public class RateLimiterTests
 
         await Task.WhenAll(tasks);
 
-        Console.WriteLine("✅ API Simulation Test Completed.");
+        Console.WriteLine("API Simulation Test Completed.");
     }
 }

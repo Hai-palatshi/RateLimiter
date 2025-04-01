@@ -7,17 +7,15 @@ class Program
 {
     static async Task Main(string[] args)
     {
-        // פעולה לדוגמה – תדפיס את שם הקריאה והשעה
         Func<string, Task> exampleAction =  arg =>
         {
             Console.WriteLine($"[ {DateTime.Now:HH:mm:ss.fff} ] Executing: {arg}");
             return Task.CompletedTask;
         };
 
-        // הגדרת מגבלות קצב – עד 3 קריאות בכל שנייה
         var rules = new List<RateLimitRule>
         {
-            new RateLimitRule(3, TimeSpan.FromSeconds(1))
+            new RateLimitRule(4, TimeSpan.FromSeconds(1))
         };
 
         var rules2 = new List<RateLimitRule>
@@ -25,26 +23,24 @@ class Program
             new RateLimitRule(10, TimeSpan.FromSeconds(1))
         };
 
-        // יצירת RateLimiter
+        // create RateLimiter
         var limiter = new RateLimiter<string>(exampleAction, rules);
         var limiter2 = new RateLimiter<string>(exampleAction, rules2);
 
-        // יצירת 10 קריאות במקביל
+        // create call
         var tasks = new List<Task>();
         for (int i = 1; i <= 10; i++)
         {
-            int copy = i; // כדי לשמור את הערך הנכון
+            int copy = i;
             tasks.Add(limiter.Perform($"Call {copy}"));
         }
 
-        var tasks1 = new List<Task>();
-        for (int i = 1; i <= 10; i++)
-        {
-            int copy = i; // כדי לשמור את הערך הנכון
-            tasks.Add(limiter2.Perform($"Call {copy}"));
-        }
+        //for (int i = 1; i <= 10; i++)
+        //{
+        //    int copy = i; 
+        //    tasks.Add(limiter2.Perform($"Call {copy}"));
+        //}
 
-        // מחכים שכל הקריאות יסתיימו
         await Task.WhenAll(tasks);
 
 
@@ -54,6 +50,6 @@ class Program
         //await testRunner.RunTestAsync();
 
 
-        Console.WriteLine("✅ All calls finished.");
+        Console.WriteLine("All calls finished.");
     }
 }

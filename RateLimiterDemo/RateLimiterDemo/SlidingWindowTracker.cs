@@ -15,26 +15,31 @@ public class SlidingWindowTracker
         callTimes = new Queue<DateTime>();
         locker = new object();
     }
-
-    // האם מותר לבצע פעולה עכשיו?
     public bool CanExecute()
     {
         lock (locker)
         {
             DateTime now = DateTime.UtcNow;
 
-            // מסיר את כל הקריאות שנעשו מחוץ לחלון הזמן
-            while (callTimes.Count > 0 && now - callTimes.Peek() > timeWindow)
+            //We will clean up old calls that went out of the time window.
+            while (callTimes.Count > 0)
             {
-                callTimes.Dequeue();
-            }
+                DateTime oldestCallTime = callTimes.Peek();
+                TimeSpan timeSinceOldestCall = now - oldestCallTime;
 
-            // אם כמות הקריאות בתוך החלון קטנה מהמגבלה – מותר להריץ
+                if (timeSinceOldestCall > timeWindow)
+                {
+                    callTimes.Dequeue(); // Removing an old call from the queue
+                }
+                else
+                {
+                    break; // All other readings are new.
+                }
+            }
+            // check if a new call is allowed.
             return callTimes.Count < maxCalls;
         }
     }
-
-    // רושם שבוצעה פעולה עכשיו
     public void RecordExecution()
     {
         lock (locker)

@@ -24,6 +24,8 @@ public class RateLimiter<TArg>
 
     public async Task Perform(TArg input)
     {
+        Console.WriteLine($"Started Perform {input}");
+
         bool printedWaiting = false;
 
         // Keep checking if the action is allowed based on all rules
@@ -61,6 +63,7 @@ public class RateLimiter<TArg>
             // Wait a bit before trying again
             await Task.Delay(100);
         }
+        Console.WriteLine($"finish Perform {input}");
 
         // Execute the actual action
         await _action(input);
