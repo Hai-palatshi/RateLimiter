@@ -96,7 +96,7 @@ namespace RateLimiterTests
             stopwatch.Stop();
 
             Assert.AreEqual(6, counter);
-            Assert.IsTrue(stopwatch.ElapsedMilliseconds >= 1000, "Expected throttling across batches");
+            Assert.IsTrue(stopwatch.ElapsedMilliseconds >= 1000);
         }
 
         [TestMethod]
